@@ -4,18 +4,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import ru.netology.entity.Location;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GeoServiceImplTest {
-    private GeoServiceImpl geoService = new GeoServiceImpl();
+
+    private final GeoServiceImpl geoService = new GeoServiceImpl();
     private static final String OTHER_IP = "23.55.13.22";
 
-
     @Test
-    void testByIp_Null_NotNull() {
-
+    void byIp_Null_NotNullTest() {
         Assertions.assertNotNull(geoService.byIp(GeoServiceImpl.LOCALHOST));
         Assertions.assertNotNull(geoService.byIp(GeoServiceImpl.MOSCOW_IP));
         Assertions.assertNotNull(geoService.byIp(GeoServiceImpl.NEW_YORK_IP));
@@ -29,7 +25,17 @@ class GeoServiceImplTest {
             "172.12345, RUSSIA",
             "96.12345, USA"
     })
-    void testByIp(String ip, String country) {
+    void byIpTest(String ip, String country) {
         Assertions.assertEquals(country, geoService.byIp(ip).getCountry().toString());
+    }
+
+    @Test
+    void testByIpShouldBeReturnLocationWithCountryNull() {
+        Assertions.assertNull(geoService.byIp("127.0.0.1").getCountry());
+    }
+
+    @Test
+    void byCoordinatesTestShouldBeReturnThrow() {
+        Assertions.assertThrows(RuntimeException.class, () -> geoService.byCoordinates(12.56,145.8));
     }
 }
